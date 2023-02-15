@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>10Pearls</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <style>
+      body {
+        background-color: lightgray;
+        text-align: center;
+        font-family: sans-serif;
+      }
+      h1 {
+        color: blue;
+        font-size: 48px;
+        margin-top: 50px;
+      }
+      form {
+        margin-top: 100px;
+      }
+      input[type="text"] {
+        padding: 10px;
+        font-size: 18px;
+        width: 60%;
+        margin-bottom: 20px;
+      }
+      input[type="file"] {
+        padding: 10px;
+        font-size: 18px;
+        width: 60%;
+        margin-bottom: 20px;
+      }
+      input[type="submit"] {
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+      }
+      p {
+        margin-top: 50px;
+        font-size: 24px;
+        color: blue;
+      }
+      .response {
+        margin-top: 50px;
+      }
+      .prompt {
+        margin-top: 50px;
+        font-size: 24px;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>10Pearls ChatGPT</h1>
+    <form id="form" method="post" enctype="multipart/form-data">
+      <input
+        type="text"
+        name="question"
+        placeholder="Enter your prompt..."
+        required
+      />
+      <input type="file" accept="application/pdf" name="file" />
+      <input type="submit" value="Submit" />
+    </form>
+    <div class="response">
+      <h3 class="timer"></h3>
+      <div class="prompt">
+        <p></p>
+      </div>
+      <p class="responseMessage"></p>
+    </div>
+
+    <script type="text/javascript">
+      $("#form").submit(function (event) {
+        $(".timer").html("");
+        event.preventDefault();
+        var form = $("form")[0]; // You need to use standard javascript object here
+        var formData = new FormData(form);
+        $(".timer").html("Loading");
+        $.ajax({
+          url: "/upload",
+          data: formData,
+          type: "POST",
+          contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+          processData: false, // NEEDED, DON'T OMIT THIS
+          contentType: false,
+          success: function (data) {
+            $(".timer").html("Response");
+            $(".responseMessage").html(data.message);
+          },
+          error: function (error) {
+            $(".timer").html("Response");
+            $(".responseMessage").html(data.message.message);
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
