@@ -79,6 +79,7 @@
         var form = $("form")[0]; // You need to use standard javascript object here
         var formData = new FormData(form);
         $(".timer").html("Loading");
+        $(".responseMessage").html("");
         $.ajax({
           url: "/upload",
           data: formData,
