@@ -39,7 +39,16 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     answer = await runCompletion(fileContent, req.body.question);
     res.send({ message: answer });
   } catch (error) {
-    res.send({ message: error }).sendStatus(400);
+    res.send({ message: error });
+  }
+});
+
+app.post("/searchModel", upload.single("file"), async (req, res) => {
+  try {
+    answer = await runCompletionFromModel(req.body.question);
+    res.send({ message: answer });
+  } catch (error) {
+    res.send({ message: error });
   }
 });
 
@@ -47,7 +56,7 @@ async function runCompletion(text, question) {
   const completion = await openai.createCompletion({
     max_tokens: 200,
     model: "text-davinci-003",
-    prompt: `Answer the question as completely in detail using the provided document, and if the answer is not contained within the text below, say "I could'nt find answer for this question within the context"
+    prompt: `Answer the question as completely in detail using the provided document, and if the answer is not contained within the document , and if you cannot find any answer say "I don't know"
   
     Context:
     ${text}.
@@ -55,7 +64,25 @@ async function runCompletion(text, question) {
     Q: ${question}
     A:`,
   });
-  console.log(completion.data);
+
+  return completion.data.choices[0].text;
+}
+
+async function runCompletionFromModel(question) {
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",
+    prompt: `Answer the question as completely in detail using the provided text and if you don't know the answer say "I couldn't find answer to your question in my knowledge model"
+
+    Q: ${question}
+    A:`,
+    temperature: 0.7,
+    max_tokens: 200,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    stop: ["input:"],
+  });
+
   return completion.data.choices[0].text;
 }
 
