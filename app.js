@@ -23,7 +23,7 @@ app.get("/", function (req, res) {
   res.send("Successful response.");
 });
 
-let fileContent = null;
+let fileContent = "";
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   // Read the uploaded file as text
