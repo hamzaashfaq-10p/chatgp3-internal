@@ -90,7 +90,7 @@
           success: function (data) {
             $(".timer").html("Response");
             $(".responseMessage").html("");
-            if (data.message.trim() === "I don't know" || data.message.trim() === "I don't know.") {
+            if (data && data.message && data.message.trim() === "I don't know" || data.message.trim() === "I don't know.") {
               const response = confirm(
                 "I couldn't find answer to the question from the provided context , do you want me to search from model?"
               );
