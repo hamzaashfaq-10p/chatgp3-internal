@@ -89,7 +89,20 @@
           contentType: false,
           success: function (data) {
             $(".timer").html("Response");
-            $(".responseMessage").html(data.message);
+            $(".responseMessage").html("");
+            if (data.message.trim() === "I don't know.") {
+              const response = confirm(
+                "I couldn't find answer to the question from the provided context , do you want me to search from model?"
+              );
+
+              if (response) {
+                $(".timer").html("Loading");
+                $(".responseMessage").html("Searching in my model");
+                callModel(formData);
+              } else {
+                $(".responseMessage").html(data.message);
+              }
+            }
           },
           error: function (error) {
             $(".timer").html("Response");
@@ -97,6 +110,25 @@
           },
         });
       });
+
+      function callModel(formData) {
+        $.ajax({
+          url: "/searchModel",
+          data: formData,
+          type: "POST",
+          contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+          processData: false, // NEEDED, DON'T OMIT THIS
+          contentType: false,
+          success: function (data) {
+            $(".timer").html("Response");
+            $(".responseMessage").html(data.message);
+          },
+          error: function (error) {
+            $(".timer").html("Response");
+            $(".responseMessage").html("An error occured");
+          },
+        });
+      }
     </script>
   </body>
 </html>
