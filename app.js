@@ -102,7 +102,7 @@ app.post("/searchModel", upload.single("file"), async (req, res) => {
 
 async function runCompletion(text, question) {
   const completion = await openai.createCompletion({
-    max_tokens: 200,
+    max_tokens: 500,
     model: "text-davinci-003",
     prompt: `Answer the question as completely in detail using the provided document, and if the answer is not contained within the document , and if you cannot find any answer say "I don't know"
   
@@ -124,7 +124,7 @@ async function runCompletionFromModel(question) {
     Q: ${question}
     A:`,
     temperature: 0.7,
-    max_tokens: 200,
+    max_tokens: 500,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
