@@ -80,11 +80,12 @@ app.post("/upload", upload.single("file"), async (req, resp) => {
           resp.send({ message: answer });
         }
       );
-    }
-    let newAnswer = await runCompletionFromModel(req.body.question);
-    answer = `The document didn't contain the required answer so this is what i got from my model : \n ${newAnswer}`;
+    } else {
+      let newAnswer = await runCompletionFromModel(req.body.question);
+      answer = `The document didn't contain the required answer so this is what i got from my model : \n ${newAnswer}`;
 
-    resp.send({ message: answer });
+      resp.send({ message: answer });
+    }
   } catch (error) {
     resp.send({ message: error });
   }
