@@ -49,10 +49,11 @@ app.post("/upload", upload.single("file"), async (req, resp) => {
   var finalAnswer = "";
 
   let waiting = true;
+  let path = "";
 
   try {
     if (req.file?.path) {
-      if (!readFileSync && !data) {
+      if (!readFileSync && !data && path != req.file.path) {
         console.log("Came here");
         readFileSync = fs.readFileSync(req.file.path);
         data = await getData(readFileSync);
