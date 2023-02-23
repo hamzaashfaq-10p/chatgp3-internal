@@ -110,7 +110,7 @@ app.post("/upload", upload.single("file"), async (req, resp) => {
   } catch (error) {
     console.log(error);
     waiting = false;
-    resp.send({ message: error.message });
+    resp.send({ message: finalAnswer !== "" ? finalAnswer : error.message });
     return;
   }
 
